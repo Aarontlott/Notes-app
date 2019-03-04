@@ -74,9 +74,11 @@ html {
 
 .notes {
   flex-grow: 2;
-  padding: 0 20px;
+  margin: 0 20px;
   max-height: 320px;
   overflow: scroll;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 .notes ul {
