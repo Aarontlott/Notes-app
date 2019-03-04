@@ -51,9 +51,11 @@ class App extends Component {
 
   render() {
     Moment.locale('en');
+    // Setup some variables for our notes
     const notes = this.state.notes;
     const activeText = this.state.text;
 
+    // Adding a new note
     const addNote = () => {
       let newNote = {
         heading: 'Here is your new note',
@@ -61,9 +63,11 @@ class App extends Component {
         date: Date.now(),
         active: 'active'
       };
+      // Reset the active values
       for (var value of notes) {value.active = ''}
+      // Add our new note
       notes.push(newNote);
-      this.setState(notes);
+      // Push that new info to the state
       this.setState(state => ({
         notes: notes,
         text: 'Here is your new note',
@@ -72,19 +76,21 @@ class App extends Component {
     };
 
     const makeActive = (e) => {
-      // console.log(e.target.id);
+      // Make a note active
       let textShown;
       let activeNote;
       for (var value of notes) {
         if (value.date === parseInt(e.target.id)) {
+          // Set the active notes text to the textarea value
           value.active = 'active';
           textShown = value.text;
           activeNote = value.date;
         } else {
+          // Otherwise clear it
           value.active = '';
         }
       }
-      // this.setState(notes);
+      // Set the states
       this.setState(state => ({
         notes: notes,
         text: textShown,
@@ -93,10 +99,13 @@ class App extends Component {
     };
 
     const generateHeading = (text) => {
+      // Generate a heading
       let result;
       if (text.substring(0,30).indexOf('\n') > 0) {
+        // If we find a newline under 30 chars, that's our heading
         result = text.substring(0,30).split('\n')[0];
       } else {
+        // Otherwise first 30 and a ... if above that needed
         result = text.substring(0,30);
         if (text.length > 30) result += '...'
       }
@@ -104,9 +113,11 @@ class App extends Component {
     };
 
     const updateText = (e) => {
+      // Update the textarea and save our progress
       this.setState({text: e.target.value});
       for (var note of notes) {
         if (note.date === this.state.active) {
+          // Taking care to generate a new heading
           note.text = e.target.value;
           note.heading = generateHeading(note.text);
           break;
