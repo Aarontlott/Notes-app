@@ -10,25 +10,25 @@ class App extends Component {
           heading: 'Test heading 1',
           text: 'Repellat nulla et facere consequatur aut consectetur.',
           date: 1547942400000,
-          active: false
+          active: ''
         },
         {
           heading: 'Test heading 2',
           text: 'Repellat nulla et facere consequatur aut consectetur.',
           date: 1549152000000,
-          active: false
+          active: ''
         },
         {
           heading: 'Test heading 3',
           text: 'Repellat nulla et facere consequatur aut consectetur.',
           date: 1550275200000,
-          active: false
+          active: ''
         },
         {
           heading: 'Test heading 4',
           text: 'Repellat nulla et facere consequatur aut consectetur.',
           date: 1551312000000,
-          active: false
+          active: ''
         }
       ], text: '' };
     
@@ -36,21 +36,33 @@ class App extends Component {
 
   render() {
     Moment.locale('en');
+    const notes = this.state.notes;
+    var textShown = this.state.text;
+    console.log(textShown);
 
     const addNote = () => {
       let newNote = {
         heading: 'Here is your new note...',
         text: 'Here is your new note...',
         date: Date.now(),
-        active: true
+        active: 'active'
       };
+      for (var value of notes) {value.active = ''}
       notes.push(newNote);
       this.setState(notes);
     };
 
-    const notes = this.state.notes;
     const makeActive = (e) => {
-      console.log(e.target);
+      // console.log(e.target.id);
+      for (var value of notes) {
+        if (value.date === parseInt(e.target.id)) {
+          value.active = 'active';
+          textShown = value.text;
+        } else {
+          value.active = '';
+        }
+      }
+      this.setState(notes);
     };
 
     return (
@@ -75,11 +87,15 @@ function RenderNotesList(props) {
   props.notesToRender.sort(function (a, b) {
     return b.date - a.date;
   });
-  const handleClick = (e) => props.onClickFunction(e);
+  const handleClick = (e) => {
+    props.onClickFunction(e);
+    // document.querySelector('#notesContainer li').className = '';
+    // e.target.className = "active";
+  };
   return (
-    <ul>
+    <ul id="notesContainer">
      {props.notesToRender.map(note => (
-          <li key={note.date}><button id={note.date} onClick={handleClick}>{note.heading} <br /> <span>{Moment(note.date).format('Do MMM YYYY')}</span></button></li>
+          <li key={note.date} className={note.active}><button id={note.date} onClick={handleClick}>{note.heading} <br /> {Moment(note.date).format('Do MMM YYYY')}</button></li>
         ))}
     </ul>
   );
